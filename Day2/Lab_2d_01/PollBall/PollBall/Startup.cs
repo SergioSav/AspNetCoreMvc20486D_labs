@@ -30,11 +30,8 @@ namespace PollBall
                     var selectedGame = (SelectedGame)Enum.Parse(typeof(SelectedGame), selectedValue, true);
                     pollResults.AddVote(selectedGame);
 
-                    var gameVotes = pollResults.GetVoteResult();
-                    foreach (var currentVote in gameVotes)
-                    {
-                        await context.Response.WriteAsync($"<div>Game name: {currentVote.Key}. Votes: {currentVote.Value}</div>");
-                    }
+                    context.Response.Headers.Add("Content-Type", "text/html");
+                    await context.Response.WriteAsync($"Thank you for submitting the poll. You may look at the poll results <a href='/?submitted=true'>here</a>.");
                 }
                 else
                 {
