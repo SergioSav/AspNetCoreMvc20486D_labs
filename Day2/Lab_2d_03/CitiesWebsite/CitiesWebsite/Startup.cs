@@ -10,7 +10,7 @@ namespace CitiesWebsite
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddSingleton<ICityProvider, CityProvider>();
             services.AddSingleton<ICityFormatter, CityFormatter>();
         }
