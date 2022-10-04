@@ -18,12 +18,14 @@ namespace WorldJourney.Controllers
             _data.CityInitializeData();
         }
 
+        [Route("WorldJourney")]
         public IActionResult Index()
         {
             ViewData["Page"] = "Search city";
             return View();
         }
 
+        [Route("CityDetails/{id?}")]
         public IActionResult Details(int? id)
         {
             ViewData["Page"] = "Selected city";
