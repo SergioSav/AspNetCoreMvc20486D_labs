@@ -17,28 +17,28 @@ namespace Cupcakes.Data
             modelBuilder.Entity<Bakery>().HasData(
                 new Bakery
                 {
-                    BackeryId = 1,
+                    BakeryId = 1,
                     BakeryName = "Gluteus Free",
                     Address = "635 Brighton Circle Road",
                     Quantity = 8,
                 },
                 new Bakery
                 {
-                    BackeryId = 2,
+                    BakeryId = 2,
                     BakeryName = "Cupcakes Break",
                     Address = "4323 Jerome Avenue",
                     Quantity = 22,
                 },
                 new Bakery
                 {
-                    BackeryId = 3,
+                    BakeryId = 3,
                     BakeryName = "Cupcakes Ahead",
                     Address = "2553 Pin Oak Drive",
                     Quantity = 18,
                 },
                 new Bakery
                 {
-                    BackeryId = 4,
+                    BakeryId = 4,
                     BakeryName = "Sugar",
                     Address = "1608 Charles Street",
                     Quantity = 30,

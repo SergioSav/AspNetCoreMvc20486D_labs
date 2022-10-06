@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Cupcakes.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Cupcakes.Repositories;
 
 namespace Cupcakes
 {
@@ -19,6 +19,7 @@ namespace Cupcakes
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CupcakeContext>(options => options.UseSqlite("Data Source=cupcake.db"));
+            services.AddTransient<ICupcakeRepository, CupcakeRepository>();
             services.AddMvc(opt => opt.EnableEndpointRouting = false);
         }
 

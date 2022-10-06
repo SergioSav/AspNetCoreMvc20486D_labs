@@ -6,7 +6,7 @@ namespace Cupcakes.Models
     public class Bakery
     {
         [Key]
-        public int BackeryId { get; set; }
+        public int BakeryId { get; set; }
 
         [StringLength(50, MinimumLength = 4)]
         public string BakeryName { get; set; }
