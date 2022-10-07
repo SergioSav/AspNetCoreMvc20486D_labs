@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IceCreamCompany.Data;
+﻿using IceCreamCompany.Data;
 using IceCreamCompany.Repositories;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +15,7 @@ namespace IceCreamCompany
             services.AddDbContext<IceCreamContext>(options =>
                  options.UseSqlite("Data Source=iceCream.db"));
 
-            services.AddMvc();
+            services.AddMvc(opt=>opt.EnableEndpointRouting = false);
         }
 
         public void Configure(IApplicationBuilder app, IceCreamContext iceCreamContext)

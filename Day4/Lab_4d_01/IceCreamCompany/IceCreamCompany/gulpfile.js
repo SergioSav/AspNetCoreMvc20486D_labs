@@ -10,6 +10,9 @@ var paths = {
 }
 
 paths.jqueryjs = paths.nodeModules + "jquery/dist/jquery.js";
+paths.popperjs = paths.nodeModules + "popper.js/dist/umd/popper.js";
+paths.bootstrapjs = paths.nodeModules + "bootstrap/dist/js/bootstrap.js";
+paths.vendorjs = [paths.jqueryjs, paths.popperjs, paths.bootstrapjs];
 paths.destinationFolder = paths.webroot + "scripts/";
 paths.vendorjsFileName = "vendor.min.js";
 paths.jsFiles = "./Scripts/*.js";
@@ -17,6 +20,8 @@ paths.jsFileName = "script.min.js";
 paths.sassFiles = "./Styles/*.scss"
 paths.compiledCssFileName = "main.min.css";
 paths.destinationCssFolder = paths.webroot + "css/";
+paths.bootstrapCss = paths.nodeModules + "bootstrap/dist/css/bootstrap.css"
+paths.vendorCssFileName = "vendor.min.css"
 
 gulp.task("copy-js-file", function() {
     return gulp.src(paths.jqueryjs)
@@ -24,7 +29,7 @@ gulp.task("copy-js-file", function() {
 });
 
 gulp.task("min-vendor:js", function () {
-    return gulp.src(path.jqueryjs)
+    return gulp.src(paths.vendorjs)
         .pipe(concat(paths.vendorjsFileName))
         .pipe(uglify())
         .pipe(gulp.dest(paths.destinationFolder));
@@ -41,6 +46,13 @@ gulp.task("min:css", function () {
     return gulp.src(paths.sassFiles)
         .pipe(sass().on('error', sass.logError))
         .pipe(concat(paths.compiledCssFileName))
+        .pipe(cssmin())
+        .pipe(gulp.dest(paths.destinationCssFolder))
+});
+
+gulp.task("min-vendor:css", function () {
+    return gulp.src(paths.bootstrapCss)
+        .pipe(concat(paths.vendorCssFileName))
         .pipe(cssmin())
         .pipe(gulp.dest(paths.destinationCssFolder))
 });
