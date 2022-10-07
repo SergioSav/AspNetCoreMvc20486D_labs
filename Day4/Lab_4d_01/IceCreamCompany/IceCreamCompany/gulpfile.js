@@ -1,6 +1,8 @@
 ﻿var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
+var sass = require('gulp-sass')(require('sass'));
+var cssmin = require('gulp-cssmin');
 
 var paths = {
     webroot: "./wwwroot/",
@@ -12,6 +14,9 @@ paths.destinationFolder = paths.webroot + "scripts/";
 paths.vendorjsFileName = "vendor.min.js";
 paths.jsFiles = "./Scripts/*.js";
 paths.jsFileName = "script.min.js";
+paths.sassFiles = "./Styles/*.scss"
+paths.compiledCssFileName = "main.min.css";
+paths.destinationCssFolder = paths.webroot + "css/";
 
 gulp.task("copy-js-file", function() {
     return gulp.src(paths.jqueryjs)
@@ -32,6 +37,18 @@ gulp.task("min:js", function () {
         .pipe(gulp.dest(paths.destinationFolder));
 });
 
+gulp.task("min:css", function () {
+    return gulp.src(paths.sassFiles)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(concat(paths.compiledCssFileName))
+        .pipe(cssmin())
+        .pipe(gulp.dest(paths.destinationCssFolder))
+});
+
 gulp.task("js-watcher", function () {
     return gulp.watch(paths.jsFiles, gulp.series("min:js"));
+});
+
+gulp.task("sass-watcher", function () {
+    return gulp.watch(paths.sassFiles, gulp.series("min:css"));
 });
