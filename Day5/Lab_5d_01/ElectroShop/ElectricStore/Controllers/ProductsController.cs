@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace ElectricStore.Controllers
 {
@@ -56,6 +58,17 @@ namespace ElectricStore.Controllers
         [HttpGet]
         public IActionResult AddToShoppingList()
         {
+            if (HttpContext.Session.GetString("CustomerFirstName") != null)
+            {
+                var sessionCustomer = new Customer();
+                sessionCustomer.FirstName = HttpContext.Session.GetString("CustomerFirstName");
+                sessionCustomer.LastName = HttpContext.Session.GetString("CustomerLastName");
+                sessionCustomer.Email = HttpContext.Session.GetString("CustomerEmail");
+                sessionCustomer.Address = HttpContext.Session.GetString("CustomerAddress");
+                sessionCustomer.PhoneNumber = HttpContext.Session.GetInt32("CustomerPhoneNumber").Value;
+                PopulateProductsList();
+                return View(sessionCustomer);
+            }
             PopulateProductsList();
             return View();
         }
@@ -65,8 +78,18 @@ namespace ElectricStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Customers.Add(customer);
-                _context.SaveChanges();
+                HttpContext.Session.SetString("CustomerFirstName", customer.FirstName);
+                HttpContext.Session.SetString("CustomerLastName", customer.LastName);
+                HttpContext.Session.SetString("CustomerEmail", customer.Email);
+                HttpContext.Session.SetString("CustomerAddress", customer.Address);
+                HttpContext.Session.SetInt32("CustomerPhoneNumber", customer.PhoneNumber);
+                if (HttpContext.Session.GetString("CutomerProducts") != null)
+                {
+                    var productListId = JsonConvert.DeserializeObject<List<int>>(HttpContext.Session.GetString("CutomerProducts"));
+                    customer.SelectedProductsList.AddRange(productListId);
+                }
+                var serialisedDate = JsonConvert.SerializeObject(customer.SelectedProductsList);
+                HttpContext.Session.SetString("CustomerProducts", serialisedDate);
                 return RedirectToAction(nameof(Index));
             }
             PopulateProductsList(customer.SelectedProductsList);

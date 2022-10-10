@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using ElectricStore.Hubs;
 
 namespace ElectricStore
 {
@@ -14,6 +16,13 @@ namespace ElectricStore
             services.AddDbContext<StoreContext>(options =>
                  options.UseSqlite("Data Source=electricStore.db"));
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(60);
+            });
+
+            services.AddSignalR();
+
             services.AddMvc(opt => opt.EnableEndpointRouting = false);
         }
 
@@ -23,7 +32,20 @@ namespace ElectricStore
             storeContext.Database.EnsureDeleted();
             storeContext.Database.EnsureCreated();
 
+            app.UseSession();
+
             app.UseStaticFiles();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
+
+            // for new verions
+            //app.UseEndpoints(route =>
+            //{
+            //    route.MapHub<ChatHub>("/chatHub");
+            //});
 
             app.UseNodeModules(environment.ContentRootPath);
 
